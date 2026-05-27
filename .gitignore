@@ -216,3 +216,25 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Ambiente Virtual ---
+# Ignora a pasta onde estão instaladas as bibliotecas do Python
+venv/
+.venv/
+env/
+
+# --- Arquivos de Cache do Python ---
+# Arquivos compilados pelo Python que não precisam ir para o Git
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignora o arquivo onde vamos salvar as senhas (seja JSON ou SQLite)
+*.db
+*.json
+*.sqlite3
+
+# Ignora arquivos de chaves criptográficas que possamos gerar para testes
+*.key
+.env
