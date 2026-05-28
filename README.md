@@ -1,50 +1,52 @@
-# secure-cli-password-manager
-## Security
+# Secure CLI Password Manager
 
-This project was designed with a strong focus on local credential protection and secure data handling.
+## Description
+A secure, lightweight, and local Command-Line Interface (CLI) password manager written in Python. This project was developed to practice core cybersecurity concepts, such as symmetric encryption, cryptographic hashing, and secure key derivation, applied within a clean software architecture.
 
-### Encryption
+---
 
-All stored credentials are protected using **AES-256 encryption** through Python's `cryptography` library. Before being written to disk, sensitive information is encrypted using a key derived from the user's master password.
+## Security Architecture
 
-This ensures that:
-
-- Passwords are never stored in plain text;
-- Sensitive data remains protected even if the local storage file is exposed;
-- Unauthorized users cannot recover stored credentials without the correct master password.
-
-### Secure Local Storage
-
-Credentials are stored inside a modified and encrypted JSON file. Even in the event of file leakage or unauthorized access, the encrypted content remains unreadable without the decryption key.
-
-### Master Password Authentication
-
-The application only decrypts stored data after successful master password validation. Without the correct master password, the encrypted credentials cannot be accessed or restored.
+This project was designed with a strong focus on local credential protection, data integrity, and secure data handling.
 
 ### Cryptography Approach
 
-Unlike simple hashing mechanisms, this project uses **reversible encryption** because the application must be capable of recovering the original credentials when authorized by the user.
+Unlike naive storage solutions, this project combines both **hashing** and **reversible symmetric encryption** to achieve maximum local security without compromising usability:
 
-The workflow follows this structure:
+1. **One-Way Hashing (SHA-256 + Salt):** Used exclusively to verify the Master Password. The actual password is never stored on disk. Instead, the application generates a unique cryptographic fingerprint (hash) combined with a random 16-byte `salt` to prevent rainbow table and dictionary attacks.
+2. **Key Derivation Function (PBKDF2):** Upon a successful login, the application uses **PBKDF2HMAC** (with SHA-256 and 100,000 iterations) to securely derive a 32-byte encryption key from the user's Master Password. This key exists *only* within the volatile memory (RAM) while the program runs and is never written to disk.
+3. **Reversible Symmetric Encryption (AES-256 / Fernet):** Used for the credentials repository. Since the application must recover the original plain-text passwords for the user, it encrypts them using the derived RAM key before writing to the local file, and decrypts them on the fly during runtime.
 
-1. The user creates a master password;
-2. A cryptographic key is derived securely from the master password;
-3. Credentials are encrypted using AES-256;
-4. Encrypted data is stored locally;
-5. Data is decrypted only after successful authentication.
+### Secure Local Storage
 
-### Security Goals
+Credentials are stored inside a dedicated JSON file (`dados_criptografados.json`). Even in the event of local file leakage, unauthorized access, or physical theft of the machine, the encrypted content remains mathematically unreadable without the proper decryption key.
 
-The main security objectives of the project are:
+### Master Password Authentication
 
-- Confidentiality of stored credentials;
-- Protection against local file exposure;
-- Secure authentication using a master password;
-- Prevention of plain-text password storage.
+The application acts as a secure vault. It will strictly deny access and refuse to decrypt any stored data unless a valid master password is provided. For enhanced security, the application automatically terminates after 3 consecutive failed login attempts.
 
-### Technologies Used
+### Security Goals Met:
+- **Confidentiality:** Zero plain-text password storage.
+- **Data Protection:** Protection against local file exposure and leakage.
+- **Secure Authentication:** Robust master password validation using standard cryptographic guidelines.
 
-- Python
-- `cryptography` library
-- AES-256 encryption
-- Secure key derivation mechanisms
+---
+
+## Technologies Used
+
+- **Python 3** (Core logic and CLI)
+- **`cryptography` library** (Fernet implementation and PBKDF2HMAC)
+- **`hashlib` & `os` modules** (SHA-256 hashing and cryptographically secure pseudo-random number generation for Salts)
+- **JSON** (Structured local data management)
+
+---
+
+## How to Install and Run
+
+### Prerequisites
+Make sure you have Python 3 installed on your machine.
+
+### 1. Clone the repository
+```bash
+git clone [https://github.com/YOUR-USERNAME/secure-cli-password-manager.git](https://github.com/YOUR-USERNAME/secure-cli-password-manager.git)
+cd secure-cli-password-manager
