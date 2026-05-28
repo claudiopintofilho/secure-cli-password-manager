@@ -50,3 +50,43 @@ Make sure you have Python 3 installed on your machine.
 ```bash
 git clone [https://github.com/YOUR-USERNAME/secure-cli-password-manager.git](https://github.com/YOUR-USERNAME/secure-cli-password-manager.git)
 cd secure-cli-password-manager
+```
+
+---
+
+### 2. Setup the Virtual Environment (Highly Recommended)
+
+Create and activate a virtual environment to isolate the project dependencies.
+
+#### Linux / macOS
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### Windows
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+---
+
+### 3. Install Dependencies
+
+Install the required security libraries:
+
+```bash
+pip install cryptography
+```
+
+---
+
+### 4. Run the Application
+
+```bash
+python main.py
+```
+venv\Scripts\activate
